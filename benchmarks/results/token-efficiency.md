@@ -8,7 +8,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                █████████████░░░░░░░    73,246 tokens
    ├─ vs JSON          (−33.2%)               109,574 tokens
    ├─ vs JSON compact  (+5.3%)                 69,528 tokens
-   ├─ vs GCF           (+18.9%)                61,592 tokens
+   ├─ vs GCF           (+18.9%)                61,593 tokens
    ├─ vs YAML          (−14.3%)                85,451 tokens
    └─ vs XML           (−40.6%)               123,272 tokens
 
@@ -17,7 +17,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                █████████████████░░░   154,032 tokens
    ├─ vs JSON          (−15.0%)               181,141 tokens
    ├─ vs JSON compact  (+19.9%)               128,480 tokens
-   ├─ vs GCF           (+43.6%)               107,269 tokens
+   ├─ vs GCF           (+42.4%)               108,158 tokens
    ├─ vs YAML          (−0.8%)                155,346 tokens
    └─ vs XML           (−25.2%)               205,796 tokens
 
@@ -26,7 +26,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                ██████████████░░░░░░       618 tokens
    ├─ vs JSON          (−31.7%)                   905 tokens
    ├─ vs JSON compact  (+12.0%)                   552 tokens
-   ├─ vs GCF           (−10.8%)                   693 tokens
+   ├─ vs GCF           (−11.5%)                   698 tokens
    ├─ vs YAML          (−6.6%)                    662 tokens
    └─ vs XML           (−38.0%)                   997 tokens
 
@@ -34,7 +34,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                ████████████████░░░░   227,896 tokens
    ├─ vs JSON          (−21.9%)               291,620 tokens
    ├─ vs JSON compact  (+14.8%)               198,560 tokens
-   ├─ vs GCF           (+34.4%)               169,554 tokens
+   ├─ vs GCF           (+33.7%)               170,449 tokens
    ├─ vs YAML          (−5.6%)                241,459 tokens
    └─ vs XML           (−31.0%)               330,065 tokens
 ```
@@ -50,7 +50,7 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████    49,966 tokens   (+6.0% vs CSV)
    ├─ vs JSON          (−60.7%)               127,050 tokens
    ├─ vs JSON compact  (−36.8%)                79,046 tokens
-   ├─ vs GCF           (+1.9%)                 49,054 tokens
+   ├─ vs GCF           (+1.9%)                 49,055 tokens
    ├─ vs YAML          (−50.1%)               100,033 tokens
    └─ vs XML           (−65.9%)               146,596 tokens
 
@@ -60,7 +60,7 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████     9,127 tokens   (+8.7% vs CSV)
    ├─ vs JSON          (−59.0%)                22,257 tokens
    ├─ vs JSON compact  (−35.8%)                14,223 tokens
-   ├─ vs GCF           (+8.7%)                  8,397 tokens
+   ├─ vs GCF           (+8.7%)                  8,398 tokens
    ├─ vs YAML          (−48.9%)                17,870 tokens
    └─ vs XML           (−65.7%)                26,628 tokens
 
@@ -70,7 +70,7 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████     8,744 tokens   (+2.7% vs CSV)
    ├─ vs JSON          (−42.3%)                15,144 tokens
    ├─ vs JSON compact  (−23.7%)                11,454 tokens
-   ├─ vs GCF           (+2.0%)                  8,575 tokens
+   ├─ vs GCF           (+2.0%)                  8,576 tokens
    ├─ vs YAML          (−33.4%)                13,128 tokens
    └─ vs XML           (−48.9%)                17,095 tokens
 
@@ -79,7 +79,7 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████    67,837 tokens   (+5.9% vs CSV)
    ├─ vs JSON          (−58.7%)               164,451 tokens
    ├─ vs JSON compact  (−35.2%)               104,723 tokens
-   ├─ vs GCF           (+2.7%)                 66,026 tokens
+   ├─ vs GCF           (+2.7%)                 66,029 tokens
    ├─ vs YAML          (−48.2%)               131,031 tokens
    └─ vs XML           (−64.4%)               190,319 tokens
 ```
