@@ -3,7 +3,7 @@ import { stringify as stringifyCSV } from 'csv-stringify/sync'
 import { XMLBuilder } from 'fast-xml-parser'
 import { stringify as stringifyYAML } from 'yaml'
 import { encode as encodeToon } from '../../packages/toon/src/index.ts'
-import { encodeGeneric as encodeGCF } from '../../../gcf-typescript/src/generic.ts'
+import { encodeGeneric as encodeGCF } from '@blackwell-systems/gcf'
 
 /**
  * Format converters registry

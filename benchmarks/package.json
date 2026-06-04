@@ -26,6 +26,6 @@
     "yaml": "^2.9.0"
   },
   "dependencies": {
-    "@blackwell-systems/gcf": "^0.1.0"
+    "@blackwell-systems/gcf": "^0.1.1"
   }
 }
