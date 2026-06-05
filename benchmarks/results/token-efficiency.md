@@ -26,7 +26,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                ██████████████░░░░░░       618 tokens
    ├─ vs JSON          (−31.7%)                   905 tokens
    ├─ vs JSON compact  (+12.0%)                   552 tokens
-   ├─ vs GCF           (−11.5%)                   698 tokens
+   ├─ vs GCF           (+0.3%)                    616 tokens
    ├─ vs YAML          (−6.6%)                    662 tokens
    └─ vs XML           (−38.0%)                   997 tokens
 
@@ -34,7 +34,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                ████████████████░░░░   227,896 tokens
    ├─ vs JSON          (−21.9%)               291,620 tokens
    ├─ vs JSON compact  (+14.8%)               198,560 tokens
-   ├─ vs GCF           (+33.7%)               170,449 tokens
+   ├─ vs GCF           (+33.8%)               170,367 tokens
    ├─ vs YAML          (−5.6%)                241,459 tokens
    └─ vs XML           (−31.0%)               330,065 tokens
 ```

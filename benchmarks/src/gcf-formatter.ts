@@ -60,7 +60,15 @@ function encodeArray(arr: unknown[], name: string, lines: string[], depth: numbe
     return
   }
 
-  // Non-uniform: encode each item
+  // Check if all items are primitives (inline as comma-separated).
+  const allPrimitive = arr.every(item => item === null || typeof item !== 'object')
+  if (allPrimitive) {
+    const vals = arr.map(item => formatValue(item))
+    lines.push(`${indent(depth)}${name}[${arr.length}]: ${vals.join(',')}`)
+    return
+  }
+
+  // Non-uniform with objects: encode each item
   if (name) lines.push(`${indent(depth)}## ${name} [${arr.length}]`)
   for (let i = 0; i < arr.length; i++) {
     const item = arr[i]

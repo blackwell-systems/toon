@@ -8,10 +8,10 @@ This fork adds [GCF (Graph Compact Format)](https://github.com/blackwell-systems
 
 | Dataset | GCF | TOON | Winner |
 |---------|-----|------|--------|
-| E-commerce orders | 61,592 | 73,246 | **GCF (19% smaller)** |
-| Semi-uniform event logs | 107,269 | 154,032 | **GCF (44% smaller)** |
-| Deeply nested config | 693 | 618 | TOON (11% smaller) |
-| **Total** | **169,554** | **227,896** | **GCF (34% smaller)** |
+| E-commerce orders | 61,593 | 73,246 | **GCF (19% smaller)** |
+| Semi-uniform event logs | 108,158 | 154,032 | **GCF (42% smaller)** |
+| Deeply nested config | 616 | 618 | **GCF (0.3% smaller)** |
+| **Total** | **170,367** | **227,896** | **GCF (34% smaller)** |
 
 ### Flat-Only Track (pure tabular data)
 
@@ -30,7 +30,7 @@ This fork adds [GCF (Graph Compact Format)](https://github.com/blackwell-systems
 | Flat-only | **GCF 3% smaller** |
 | Overall | **GCF 20% smaller** |
 
-GCF beats TOON on both tracks. TOON's claimed advantage ("39.9% fewer tokens than JSON") is real, but GCF achieves greater savings on the same data. The only dataset where TOON wins is deeply nested config (a 75-token difference on a 618-token payload).
+GCF beats TOON on both tracks and all 6 datasets. TOON has no token efficiency advantage on any data shape. The closest result is deeply nested config (616 vs 618, a 2-token difference).
 
 ## Why GCF Wins on Semi-Uniform Data
 
@@ -44,11 +44,11 @@ Separately from token efficiency, GCF also matches or beats TOON on LLM comprehe
 
 | Format | Accuracy | Tokens |
 |--------|----------|--------|
-| **GCF** | **100%** | **11,090** |
-| TOON | 100% | 16,378 |
-| JSON | 66.7% | 53,341 |
+| **GCF** | **100%** (13/13) | **11,090** |
+| TOON | 92.3% (12/13) | 16,378 |
+| JSON | 76.9% (10/13) | 53,341 |
 
-Equal accuracy, 32% fewer tokens. Eval: [gcf-go/eval](https://github.com/blackwell-systems/gcf-go/tree/main/eval)
+GCF is the only format with 100% accuracy, at 32% fewer tokens than TOON. Eval: [gcf-go/eval](https://github.com/blackwell-systems/gcf-go/tree/main/eval)
 
 ## Reproducing
 
