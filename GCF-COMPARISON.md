@@ -38,17 +38,35 @@ TOON's tabular format requires uniform arrays (identical fields per row). When d
 
 GCF handles semi-uniformity natively: primitive fields encode as positional rows, nested fields attach inline only when present. No format-level decision between "tabular mode" and "nested mode" is required.
 
-## Comprehension Accuracy
+## LLM Comprehension (23 runs, 10 models, 3 providers)
 
-Separately from token efficiency, GCF also matches or beats TOON on LLM comprehension. At 500 symbols:
+Token efficiency is only half the story. Can the model actually read the format at scale?
 
-| Format | Accuracy | Tokens |
-|--------|----------|--------|
-| **GCF** | **100%** (13/13) | **11,090** |
-| TOON | 92.3% (12/13) | 16,378 |
-| JSON | 76.9% (10/13) | 53,341 |
+500 symbols, 200 edges, 13 extraction questions, zero format instructions. 1,300+ evaluations across Claude Opus/Sonnet/Haiku, GPT-5.5/5.4/5.4-mini, Gemini 2.5 Flash/Pro, Gemini 3.1 Pro, and Gemini 3.5 Flash.
 
-GCF is the only format with 100% accuracy, at 32% fewer tokens than TOON. Eval: [gcf-go/eval](https://github.com/blackwell-systems/gcf-go/tree/main/eval)
+| | GCF | TOON | JSON |
+|---|---|---|---|
+| **Avg accuracy** | **90.7%** | 68.5% | 53.6% |
+| **Input tokens** (500 sym) | **11,090** | 16,378 | 53,341 |
+
+GCF wins 22 of 23 runs (1 tie, 0 losses). Four models achieve 100%: Sonnet, Gemini 2.5 Pro, Gemini 3.1 Pro, Gemini 3.5 Flash.
+
+Full results: [gcformat.com/guide/benchmarks](https://gcformat.com/guide/benchmarks.html)
+
+## LLM Generation (28 runs, 9 models)
+
+Can models produce valid output in each format? 3-line primer, validated through real decoders.
+
+| Model | GCF | TOON | JSON |
+|-------|-----|------|------|
+| Claude Opus 4.6 | **5/5** | 0/5 | 5/5 |
+| Claude Sonnet 4.6 | **5/5** | 2-3/5 | 5/5 |
+| GPT-5.5 | **4-5/5** | 1-2/5 | 5/5 |
+| GPT-5.4 | **5/5** | 0/5 | 5/5 |
+| Gemini 2.5 Pro | **5/5** | 1/5 | 5/5 |
+| Gemini 3.1 Pro | **5/5** | 0/5 | 5/5 |
+
+TOON's official decoder rejects LLM-generated output on 7 of 9 models. The error is always the same: the model writes `target` where TOON expects the integer `0`. No model has ever been trained on GCF, yet every frontier model produces valid output on first exposure.
 
 ## Reproducing
 
@@ -72,6 +90,10 @@ No changes to TOON's encoding, datasets, tokenization, or measurement methodolog
 
 ## Links
 
-- [GCF Specification](https://github.com/blackwell-systems/gcf)
-- [GCF Go Implementation](https://github.com/blackwell-systems/gcf-go)
+- [GCF Specification](https://github.com/blackwell-systems/gcf) (DOI: [10.5281/zenodo.20579817](https://doi.org/10.5281/zenodo.20579817))
+- [Documentation and Benchmarks](https://gcformat.com/)
+- [Playground (live three-way comparison)](https://gcformat.com/playground.html)
+- [Full Eval Results (all 23 runs)](https://gcformat.com/guide/eval-results.html)
+- [GCF Proxy (wrap any MCP server)](https://github.com/blackwell-systems/gcf-proxy): `pip install gcf-proxy`
+- Implementations: [Go](https://github.com/blackwell-systems/gcf-go) | [TypeScript](https://github.com/blackwell-systems/gcf-typescript) | [Python](https://github.com/blackwell-systems/gcf-python) | [Rust](https://github.com/blackwell-systems/gcf-rust) | [Swift](https://github.com/blackwell-systems/gcf-swift) | [Kotlin](https://github.com/blackwell-systems/gcf-kotlin)
 - [TOON Specification](https://github.com/toon-format/spec)
