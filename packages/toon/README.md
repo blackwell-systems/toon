@@ -21,11 +21,11 @@ E-commerce orders (500 orders, nested items):
 
 Deeply nested configuration:
   TOON   ████████████████████████████████████████████████████      618
-  GCF    ██████████████████████████████████████████████████████░░  698  ◀ TOON 11% smaller
+  GCF    █████████████████████████████████████████████████████░    616  ◀ 0.3% smaller
 
 Mixed total:
   TOON   ████████████████████████████████████████████████████  227,896
-  GCF    █████████████████████████████████████░░░░░░░░░░░░░░░  170,449  ◀ 25% smaller
+  GCF    ██████████████████████████████████░░░░░░░░░░░░░░░░░░  170,367  ◀ 34% smaller
 ```
 
 ### Flat-Only Track
@@ -54,12 +54,12 @@ Flat total:
 |---------|-----|------|--------|
 | Semi-uniform event logs | 108,158 | 154,032 | **GCF 30% smaller** |
 | E-commerce orders | 61,593 | 73,246 | **GCF 16% smaller** |
-| Deeply nested config | 698 | 618 | TOON 11% smaller |
+| Deeply nested config | 616 | 618 | **GCF 0.3% smaller** |
 | Employee records | 49,055 | 49,966 | **GCF 2% smaller** |
 | Analytics time-series | 8,398 | 9,127 | **GCF 8% smaller** |
 | GitHub repos | 8,576 | 8,744 | **GCF 2% smaller** |
 
-GCF wins on 5 of 6 datasets.
+GCF wins on all 6 datasets.
 
 ## What changed
 
@@ -89,9 +89,16 @@ This tests the **tabular/generic** profile only. GCF's largest advantages come f
 
 These are tested in the [GCF comprehension eval](https://github.com/blackwell-systems/gcf-go/tree/main/eval).
 
+## Beyond Token Efficiency
+
+This benchmark only tests token counts. GCF's full advantage includes LLM comprehension (90.7% avg across 10 models vs TOON's 68.5%) and generation (TOON's decoder rejects LLM output on 7 of 9 models). See [GCF-COMPARISON.md](GCF-COMPARISON.md) for the full analysis.
+
 ## Links
 
-- [GCF Specification](https://github.com/blackwell-systems/gcf)
-- [GCF vs TOON](https://blackwell-systems.github.io/gcf/guide/vs-toon.html)
-- [GCF Playground](https://blackwell-systems.github.io/gcf/playground.html)
+- [GCF Specification](https://github.com/blackwell-systems/gcf) (DOI: [10.5281/zenodo.20579817](https://doi.org/10.5281/zenodo.20579817))
+- [Documentation and Benchmarks](https://gcformat.com/)
+- [Full Eval Results](https://gcformat.com/guide/eval-results.html)
+- [GCF vs TOON](https://gcformat.com/guide/vs-toon.html)
+- [Playground](https://gcformat.com/playground.html)
+- [GCF Proxy](https://github.com/blackwell-systems/gcf-proxy): `pip install gcf-proxy` (wrap any MCP server, zero code changes)
 - [TOON upstream](https://github.com/toon-format/toon)

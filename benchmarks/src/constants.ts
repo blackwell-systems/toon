@@ -46,7 +46,9 @@ export const FORMATTER_DISPLAY_NAMES: Record<string, string> = {
   'json-pretty': 'JSON',
   'json-compact': 'JSON compact',
   'toon': 'TOON',
-  'gcf': 'GCF',
+  'gcf': 'GCF v2',
+  'gcf-v3': 'GCF v3',
+  'ploon': 'PLOON',
   'csv': 'CSV',
   'xml': 'XML',
   'yaml': 'YAML',
@@ -92,6 +94,14 @@ export const DATASET_NAMES = [
   'structural-validation-extra-rows',
   'structural-validation-width-mismatch',
   'structural-validation-missing-fields',
+  'lsp-symbol-search',
+  'pr-file-changes',
+  'distributed-trace',
+  'database-query-results',
+  'file-tree-diagnostics',
+  'multi-tool-agent',
+  'order-history-shared-schema',
+  'blast-radius-response',
 ] as const
 
 /**

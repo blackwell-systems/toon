@@ -699,6 +699,495 @@ export const ACCURACY_DATASETS: Dataset[] = [
 ]
 
 /**
+ * Generate LSP symbol search results (150 symbols)
+ */
+function generateLspSymbolSearch() {
+  const symbolKinds = ['function', 'class', 'method', 'interface', 'variable'] as const
+  const packages = ['controllers', 'services', 'models', 'middleware', 'utils', 'handlers', 'validators'] as const
+  const fileExtensions = ['.ts', '.tsx', '.js'] as const
+  const directories = ['src/auth', 'src/api', 'src/core', 'src/db', 'src/routes', 'src/utils', 'src/middleware', 'lib/shared'] as const
+
+  const symbols = Array.from({ length: 150 }, (_, i) => {
+    const kind = symbolKinds[i % symbolKinds.length]!
+    const pkg = packages[i % packages.length]!
+    const dir = directories[i % directories.length]!
+    const ext = fileExtensions[i % fileExtensions.length]!
+    const name = faker.helpers.arrayElement(['get', 'set', 'create', 'update', 'delete', 'validate', 'parse', 'handle', 'process', 'check']) + faker.lorem.word({ length: { min: 4, max: 10 } }).replace(/^\w/, c => c.toUpperCase())
+
+    return {
+      id: i + 1,
+      name,
+      qualifiedName: `pkg.${pkg}.${name}`,
+      kind,
+      containerName: pkg,
+      file: `${dir}/${faker.lorem.word({ length: { min: 4, max: 12 } })}${ext}`,
+      line: faker.number.int({ min: 1, max: 500 }),
+      column: faker.number.int({ min: 1, max: 80 }),
+      score: Number(faker.number.float({ min: 0.0, max: 1.0, fractionDigits: 3 })),
+      exported: faker.datatype.boolean(0.7),
+      deprecated: faker.datatype.boolean(0.1),
+    }
+  })
+
+  return {
+    query: 'auth middleware handler',
+    file: 'src/auth/middleware.ts',
+    symbols,
+  }
+}
+
+/**
+ * Generate PR file changes (45 files)
+ */
+function generatePrFileChanges() {
+  const statuses = ['added', 'modified', 'removed', 'renamed'] as const
+  const directories = ['src/api', 'src/components', 'src/utils', 'src/models', 'src/services', 'tests', 'lib', 'config'] as const
+  const extensions = ['.ts', '.tsx', '.js', '.json', '.css', '.md'] as const
+
+  const files = Array.from({ length: 45 }, (_, i) => {
+    const status = i < 8 ? 'added' : i < 35 ? 'modified' : i < 40 ? 'removed' : 'renamed'
+    const dir = directories[i % directories.length]!
+    const ext = extensions[i % extensions.length]!
+    const filename = `${dir}/${faker.lorem.word({ length: { min: 4, max: 12 } })}${ext}`
+    const additions = status === 'removed' ? 0 : faker.number.int({ min: 1, max: 150 })
+    const deletions = status === 'added' ? 0 : faker.number.int({ min: 1, max: 80 })
+
+    return {
+      filename,
+      status,
+      additions,
+      deletions,
+      changes: additions + deletions,
+      patch: `@@ -${faker.number.int({ min: 1, max: 50 })},${faker.number.int({ min: 3, max: 10 })} +${faker.number.int({ min: 1, max: 50 })},${faker.number.int({ min: 3, max: 10 })} @@\n-${faker.lorem.sentence({ min: 3, max: 8 })}\n+${faker.lorem.sentence({ min: 3, max: 8 })}`,
+      previousFilename: status === 'renamed' ? `${dir}/${faker.lorem.word({ length: { min: 4, max: 12 } })}${ext}` : null,
+    }
+  })
+
+  const totalAdditions = files.reduce((sum, f) => sum + f.additions, 0)
+  const totalDeletions = files.reduce((sum, f) => sum + f.deletions, 0)
+
+  return {
+    pullRequest: {
+      number: faker.number.int({ min: 100, max: 9999 }),
+      title: faker.git.commitMessage(),
+      author: faker.internet.username(),
+      baseBranch: 'main',
+      headBranch: `feature/${faker.lorem.slug(3)}`,
+    },
+    summary: {
+      totalFiles: files.length,
+      additions: totalAdditions,
+      deletions: totalDeletions,
+    },
+    files,
+  }
+}
+
+/**
+ * Generate distributed trace with 30 spans
+ */
+function generateDistributedTrace() {
+  const services = ['api-gateway', 'auth-service', 'user-service', 'order-service', 'payment-service', 'notification-service'] as const
+  const operations = ['HTTP GET', 'HTTP POST', 'db.query', 'cache.get', 'cache.set', 'queue.publish', 'grpc.call', 'validate', 'serialize'] as const
+  const spanStatuses = ['ok', 'error', 'timeout'] as const
+
+  function hexId(length: number): string {
+    return faker.string.hexadecimal({ length, casing: 'lower', prefix: '' })
+  }
+
+  const traceId = hexId(32)
+  const baseTime = new Date('2025-03-15T14:30:00.000Z')
+
+  const spans = Array.from({ length: 30 }, (_, i) => {
+    const status = i === 0 ? 'error' : faker.helpers.weightedArrayElement([
+      { value: 'ok' as const, weight: 70 },
+      { value: 'error' as const, weight: 20 },
+      { value: 'timeout' as const, weight: 10 },
+    ])
+    const service = services[i % services.length]!
+    const operation = operations[i % operations.length]!
+    const startTime = new Date(baseTime.getTime() + i * faker.number.int({ min: 5, max: 50 }))
+    const duration = faker.number.int({ min: 1, max: 2500 })
+
+    const httpMethod = faker.helpers.arrayElement(['GET', 'POST', 'PUT', 'DELETE'])
+    const httpStatus = status === 'error' ? faker.number.int({ min: 400, max: 599 }) : faker.number.int({ min: 200, max: 299 })
+
+    const tags: Record<string, string | number> = {
+      'http.method': httpMethod,
+      'http.url': `/api/${faker.lorem.slug(2)}`,
+      'http.status_code': httpStatus,
+    }
+    if (operation.startsWith('db')) {
+      tags['db.statement'] = `SELECT * FROM ${faker.lorem.word()} WHERE id = $1`
+      tags['db.type'] = 'postgresql'
+    }
+
+    const eventCount = faker.number.int({ min: 0, max: 3 })
+    const events = Array.from({ length: eventCount }, () => ({
+      timestamp: new Date(startTime.getTime() + faker.number.int({ min: 1, max: duration })).toISOString(),
+      name: faker.helpers.arrayElement(['log', 'exception', 'retry', 'timeout', 'cache_miss']),
+      message: faker.lorem.sentence({ min: 3, max: 8 }),
+    }))
+
+    return {
+      spanId: hexId(16),
+      parentSpanId: i === 0 ? null : hexId(16),
+      operationName: `${service}.${operation}`,
+      serviceName: service,
+      startTime: startTime.toISOString(),
+      duration,
+      status,
+      tags,
+      events,
+    }
+  })
+
+  return {
+    traceId,
+    rootSpan: spans[0]!.spanId,
+    duration: faker.number.int({ min: 800, max: 5000 }),
+    status: 'error',
+    spans,
+  }
+}
+
+/**
+ * Generate database query results (200 rows, 15 columns)
+ */
+function generateDatabaseQueryResults() {
+  const roles = ['admin', 'editor', 'viewer', 'manager', 'support'] as const
+  const teams = ['Platform', 'Growth', 'Infrastructure', 'Mobile', 'Data', 'Security', 'Frontend', 'Backend'] as const
+  const payments = ['credit_card', 'paypal', 'bank_transfer', 'crypto', 'apple_pay'] as const
+  const tiers = ['bronze', 'silver', 'gold', 'platinum'] as const
+  const statuses = ['active', 'inactive', 'suspended', 'pending_verification'] as const
+
+  const columns = [
+    { name: 'userId', type: 'integer' },
+    { name: 'email', type: 'varchar(255)' },
+    { name: 'displayName', type: 'varchar(100)' },
+    { name: 'role', type: 'varchar(50)' },
+    { name: 'team', type: 'varchar(50)' },
+    { name: 'lastLogin', type: 'timestamp' },
+    { name: 'signupDate', type: 'timestamp' },
+    { name: 'totalOrders', type: 'integer' },
+    { name: 'totalSpent', type: 'decimal(10,2)' },
+    { name: 'avgOrderValue', type: 'decimal(10,2)' },
+    { name: 'lastOrderDate', type: 'timestamp' },
+    { name: 'preferredPayment', type: 'varchar(50)' },
+    { name: 'loyaltyTier', type: 'varchar(20)' },
+    { name: 'referralCount', type: 'integer' },
+    { name: 'accountStatus', type: 'varchar(30)' },
+  ]
+
+  const rows = Array.from({ length: 200 }, (_, i) => {
+    const totalOrders = faker.number.int({ min: 0, max: 200 })
+    const avgOrderValue = Number(faker.number.float({ min: 15, max: 500, fractionDigits: 2 }))
+    const totalSpent = Number((totalOrders * avgOrderValue).toFixed(2))
+
+    return {
+      userId: i + 1,
+      email: faker.internet.email().toLowerCase(),
+      displayName: faker.person.fullName(),
+      role: roles[i % roles.length]!,
+      team: teams[i % teams.length]!,
+      lastLogin: faker.date.recent({ days: 30 }).toISOString(),
+      signupDate: faker.date.past({ years: 3 }).toISOString(),
+      totalOrders,
+      totalSpent,
+      avgOrderValue,
+      lastOrderDate: faker.date.recent({ days: 60 }).toISOString(),
+      preferredPayment: payments[i % payments.length]!,
+      loyaltyTier: tiers[Math.min(Math.floor(totalOrders / 50), 3)]!,
+      referralCount: faker.number.int({ min: 0, max: 25 }),
+      accountStatus: statuses[i % statuses.length]!,
+    }
+  })
+
+  return {
+    query: 'SELECT * FROM users JOIN order_stats ON users.id = order_stats.user_id ORDER BY total_spent DESC LIMIT 200',
+    executionTime: faker.number.float({ min: 12, max: 250, fractionDigits: 1 }),
+    rowCount: 200,
+    columns,
+    rows,
+  }
+}
+
+/**
+ * Generate file tree with diagnostics (80 files)
+ */
+function generateFileTreeDiagnostics() {
+  const languages = ['typescript', 'javascript', 'css', 'json', 'markdown', 'html'] as const
+  const severities = ['error', 'warning', 'information', 'hint'] as const
+  const diagnosticSources = ['ts', 'eslint', 'prettier', 'stylelint'] as const
+  const directories = [
+    'src/components', 'src/hooks', 'src/utils', 'src/api', 'src/store',
+    'src/types', 'src/pages', 'tests/unit', 'tests/integration', 'lib',
+  ] as const
+
+  const diagnosticMessages = [
+    'Type \'{0}\' is not assignable to type \'{1}\'',
+    'Property \'{0}\' does not exist on type \'{1}\'',
+    'Unused variable \'{0}\'',
+    'Missing return type on function',
+    'Unexpected any. Specify a different type',
+    'Prefer const over let when variable is never reassigned',
+    'Import \'{0}\' is declared but never used',
+    'Expected indentation of 2 spaces but found 4',
+    'Missing semicolon',
+    'Function has too many parameters (5). Maximum allowed is 4',
+  ] as const
+
+  let totalDiagnostics = 0
+  const files = Array.from({ length: 80 }, (_, i) => {
+    const dir = directories[i % directories.length]!
+    const lang = languages[i % languages.length]!
+    const ext = lang === 'typescript' ? '.ts' : lang === 'javascript' ? '.js' : lang === 'css' ? '.css' : lang === 'json' ? '.json' : lang === 'markdown' ? '.md' : '.html'
+    const hasDiagnostics = faker.datatype.boolean(0.4)
+    const diagCount = hasDiagnostics ? faker.number.int({ min: 1, max: 5 }) : 0
+    totalDiagnostics += diagCount
+
+    const diagnostics = Array.from({ length: diagCount }, () => ({
+      line: faker.number.int({ min: 1, max: 300 }),
+      column: faker.number.int({ min: 1, max: 80 }),
+      severity: faker.helpers.arrayElement(severities),
+      code: faker.helpers.arrayElement(['TS2322', 'TS2339', 'TS6133', 'no-unused-vars', 'prefer-const', 'semi', 'indent']),
+      message: faker.helpers.arrayElement(diagnosticMessages).replace('{0}', faker.lorem.word()).replace('{1}', faker.lorem.word()),
+      source: faker.helpers.arrayElement(diagnosticSources),
+    }))
+
+    return {
+      path: `${dir}/${faker.lorem.word({ length: { min: 4, max: 14 } })}${ext}`,
+      language: lang,
+      size: faker.number.int({ min: 200, max: 50000 }),
+      lastModified: faker.date.recent({ days: 14 }).toISOString(),
+      diagnostics,
+    }
+  })
+
+  return {
+    workspace: '/home/user/projects/acme-dashboard',
+    totalFiles: 80,
+    totalDiagnostics,
+    files,
+  }
+}
+
+/**
+ * Generate multi-tool agent composite (5 tool calls with varied results)
+ */
+function generateMultiToolAgent() {
+  const symbolKinds = ['function', 'class', 'method', 'interface', 'variable'] as const
+
+  // Tool 1: find_symbol (20 symbols)
+  const findSymbolResult = {
+    symbols: Array.from({ length: 20 }, () => ({
+      name: faker.helpers.arrayElement(['handle', 'create', 'validate', 'process', 'parse']) + faker.lorem.word({ length: { min: 4, max: 10 } }).replace(/^\w/, c => c.toUpperCase()),
+      kind: faker.helpers.arrayElement(symbolKinds),
+      file: `src/${faker.lorem.word()}/${faker.lorem.word()}.ts`,
+      line: faker.number.int({ min: 1, max: 400 }),
+      score: Number(faker.number.float({ min: 0.3, max: 1.0, fractionDigits: 3 })),
+    })),
+  }
+
+  // Tool 2: get_diagnostics (10 files)
+  const getDiagnosticsResult = {
+    files: Array.from({ length: 10 }, () => ({
+      path: `src/${faker.lorem.word()}/${faker.lorem.word()}.ts`,
+      diagnostics: Array.from({ length: faker.number.int({ min: 1, max: 4 }) }, () => ({
+        line: faker.number.int({ min: 1, max: 200 }),
+        severity: faker.helpers.arrayElement(['error', 'warning', 'information']),
+        message: faker.helpers.arrayElement([
+          'Type mismatch: expected string, got number',
+          'Property does not exist on type',
+          'Unused import declaration',
+          'Missing return statement',
+          'Cannot find name',
+        ]),
+      })),
+    })),
+  }
+
+  // Tool 3: read_file (50 lines of code)
+  const codeLines = Array.from({ length: 50 }, (_, i) => {
+    if (i === 0) return `import { ${faker.lorem.word()} } from './${faker.lorem.word()}'`
+    if (i === 2) return `export function ${faker.lorem.word()}(${faker.lorem.word()}: string): void {`
+    if (i % 5 === 0) return `  const ${faker.lorem.word()} = ${faker.helpers.arrayElement(['await', ''])} ${faker.lorem.word()}()`
+    if (i % 7 === 0) return `  if (${faker.lorem.word()}) {`
+    if (i % 7 === 1 && i > 7) return '  }'
+    return `  ${faker.lorem.word()}.${faker.lorem.word()}(${faker.lorem.word()})`
+  }).join('\n')
+
+  const readFileResult = {
+    content: codeLines,
+    language: 'typescript',
+    lines: 50,
+  }
+
+  // Tool 4: git_log (15 commits)
+  const gitLogResult = {
+    commits: Array.from({ length: 15 }, () => ({
+      hash: faker.git.commitSha(),
+      author: faker.person.fullName(),
+      date: faker.date.recent({ days: 14 }).toISOString(),
+      message: faker.git.commitMessage(),
+      filesChanged: faker.number.int({ min: 1, max: 12 }),
+    })),
+  }
+
+  // Tool 5: web_search (10 results)
+  const webSearchResult = {
+    results: Array.from({ length: 10 }, () => ({
+      title: faker.lorem.sentence({ min: 4, max: 8 }),
+      url: faker.internet.url(),
+      snippet: faker.lorem.paragraph({ min: 1, max: 2 }),
+      relevance: Number(faker.number.float({ min: 0.4, max: 1.0, fractionDigits: 3 })),
+    })),
+  }
+
+  const toolCalls = [
+    {
+      toolName: 'find_symbol',
+      callId: faker.string.uuid(),
+      duration: faker.number.int({ min: 50, max: 300 }),
+      status: 'success',
+      result: findSymbolResult,
+    },
+    {
+      toolName: 'get_diagnostics',
+      callId: faker.string.uuid(),
+      duration: faker.number.int({ min: 100, max: 500 }),
+      status: 'success',
+      result: getDiagnosticsResult,
+    },
+    {
+      toolName: 'read_file',
+      callId: faker.string.uuid(),
+      duration: faker.number.int({ min: 10, max: 50 }),
+      status: 'success',
+      result: readFileResult,
+    },
+    {
+      toolName: 'git_log',
+      callId: faker.string.uuid(),
+      duration: faker.number.int({ min: 80, max: 400 }),
+      status: 'success',
+      result: gitLogResult,
+    },
+    {
+      toolName: 'web_search',
+      callId: faker.string.uuid(),
+      duration: faker.number.int({ min: 200, max: 1500 }),
+      status: 'success',
+      result: webSearchResult,
+    },
+  ]
+
+  return {
+    sessionId: faker.string.uuid(),
+    timestamp: faker.date.recent({ days: 1 }).toISOString(),
+    toolCalls,
+    context: {
+      currentFile: 'src/auth/middleware.ts',
+      recentFiles: Array.from({ length: 5 }, () => `src/${faker.lorem.word()}/${faker.lorem.word()}.ts`),
+      activeSymbol: 'AuthMiddleware.validateToken',
+      gitBranch: `feature/${faker.lorem.slug(3)}`,
+    },
+  }
+}
+
+/**
+ * Generate order history with shared item schema (100 orders)
+ *
+ * @remarks
+ * Tests GCF's shared array schema optimization: every order's items array
+ * has the identical {sku, name, qty, price} schema, declared once.
+ */
+function generateOrderHistorySharedSchema() {
+  const orderStatuses = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'refunded'] as const
+
+  const orders = Array.from({ length: 100 }, (_, i) => {
+    const itemCount = faker.number.int({ min: 3, max: 5 })
+    const items = Array.from({ length: itemCount }, () => ({
+      sku: `SKU-${faker.string.alphanumeric({ length: 8, casing: 'upper' })}`,
+      name: faker.commerce.productName(),
+      qty: faker.number.int({ min: 1, max: 10 }),
+      price: Number(faker.commerce.price({ min: 5, max: 200 })),
+    }))
+
+    const subtotal = Number(items.reduce((sum, item) => sum + item.price * item.qty, 0).toFixed(2))
+    const tax = Number((subtotal * 0.085).toFixed(2))
+    const total = Number((subtotal + tax).toFixed(2))
+
+    return {
+      orderId: `ORD-${String(i + 1).padStart(5, '0')}`,
+      customerId: `CUST-${faker.string.alphanumeric({ length: 6, casing: 'upper' })}`,
+      date: faker.date.past({ years: 2 }).toISOString(),
+      status: orderStatuses[i % orderStatuses.length]!,
+      subtotal,
+      tax,
+      total,
+      items,
+    }
+  })
+
+  return {
+    accountId: faker.string.uuid(),
+    orders,
+  }
+}
+
+/**
+ * Generate blast radius response (50 symbols with callers)
+ *
+ * @remarks
+ * Tests shared array schema on code intelligence data: every symbol's callers
+ * array has the identical {file, line, kind, qualifiedName} schema.
+ */
+function generateBlastRadiusResponse() {
+  const symbolKinds = ['function', 'class', 'method', 'interface', 'type', 'variable'] as const
+  const callerKinds = ['function', 'method', 'class', 'test'] as const
+  const packages = ['controllers', 'services', 'models', 'handlers', 'middleware', 'utils', 'validators', 'routes'] as const
+
+  let totalCallers = 0
+  const symbols = Array.from({ length: 50 }, (_, i) => {
+    const pkg = packages[i % packages.length]!
+    const kind = symbolKinds[i % symbolKinds.length]!
+    const name = faker.helpers.arrayElement(['get', 'set', 'create', 'update', 'delete', 'validate', 'handle', 'process']) + faker.lorem.word({ length: { min: 4, max: 10 } }).replace(/^\w/, c => c.toUpperCase())
+    const callerCount = faker.number.int({ min: 3, max: 8 })
+    totalCallers += callerCount
+
+    const callers = Array.from({ length: callerCount }, () => {
+      const callerPkg = faker.helpers.arrayElement(packages)
+      const callerName = faker.helpers.arrayElement(['handle', 'process', 'test', 'validate', 'run']) + faker.lorem.word({ length: { min: 4, max: 10 } }).replace(/^\w/, c => c.toUpperCase())
+      return {
+        file: `src/${callerPkg}/${faker.lorem.word({ length: { min: 4, max: 12 } })}.ts`,
+        line: faker.number.int({ min: 1, max: 500 }),
+        kind: faker.helpers.arrayElement(callerKinds),
+        qualifiedName: `pkg.${callerPkg}.${callerName}`,
+      }
+    })
+
+    return {
+      id: i + 1,
+      qualifiedName: `pkg.${pkg}.${name}`,
+      kind,
+      file: `src/${pkg}/${faker.lorem.word({ length: { min: 4, max: 12 } })}.ts`,
+      line: faker.number.int({ min: 1, max: 500 }),
+      exported: faker.datatype.boolean(0.8),
+      score: Number(faker.number.float({ min: 0.1, max: 1.0, fractionDigits: 3 })),
+      callers,
+    }
+  })
+
+  return {
+    changedFile: 'src/services/auth-handler.ts',
+    totalSymbols: 50,
+    totalCallers,
+    symbols,
+  }
+}
+
+/**
  * Datasets for token efficiency benchmarks (larger sizes to amplify token differences)
  */
 export const TOKEN_EFFICIENCY_DATASETS: Dataset[] = [
@@ -750,4 +1239,92 @@ export const TOKEN_EFFICIENCY_DATASETS: Dataset[] = [
   },
   // Nested config: 1 config (same as accuracy)
   nestedConfigDataset,
+  // Dataset 7: LSP Symbol Search Results
+  {
+    name: 'lsp-symbol-search',
+    description: 'LSP workspace symbol search results',
+    data: generateLspSymbolSearch(),
+    metadata: {
+      supportsCSV: true,
+      structureClass: 'uniform',
+      tabularEligibility: 95,
+    },
+  },
+  // Dataset 8: PR File Changes
+  {
+    name: 'pr-file-changes',
+    description: 'Pull request file change summary',
+    data: generatePrFileChanges(),
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'nested',
+      tabularEligibility: 80,
+    },
+  },
+  // Dataset 9: Distributed Trace (API Error)
+  {
+    name: 'distributed-trace',
+    description: 'Distributed trace spans for an API error',
+    data: generateDistributedTrace(),
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'nested',
+      tabularEligibility: 40,
+    },
+  },
+  // Dataset 10: Database Query Results (Wide Table)
+  {
+    name: 'database-query-results',
+    description: 'Wide-table database query results with 15 columns',
+    data: generateDatabaseQueryResults(),
+    metadata: {
+      supportsCSV: true,
+      structureClass: 'uniform',
+      tabularEligibility: 97,
+    },
+  },
+  // Dataset 11: File Tree with Diagnostics
+  {
+    name: 'file-tree-diagnostics',
+    description: 'Project file tree with LSP diagnostics',
+    data: generateFileTreeDiagnostics(),
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'semi-uniform',
+      tabularEligibility: 55,
+    },
+  },
+  // Dataset 12: Multi-Tool Agent Composite
+  {
+    name: 'multi-tool-agent',
+    description: 'Multi-tool agent session with heterogeneous results',
+    data: generateMultiToolAgent(),
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'deep',
+      tabularEligibility: 45,
+    },
+  },
+  // Dataset 13: Order History with Shared Item Schema
+  {
+    name: 'order-history-shared-schema',
+    description: 'Order history testing shared array schema optimization',
+    data: generateOrderHistorySharedSchema(),
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'nested',
+      tabularEligibility: 70,
+    },
+  },
+  // Dataset 14: Blast Radius Response
+  {
+    name: 'blast-radius-response',
+    description: 'Blast radius response testing shared caller schema',
+    data: generateBlastRadiusResponse(),
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'nested',
+      tabularEligibility: 65,
+    },
+  },
 ]

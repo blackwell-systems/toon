@@ -6,3 +6,5 @@ packages:
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
+overrides:
+  '@blackwell-systems/gcf': link:../gcf-typescript

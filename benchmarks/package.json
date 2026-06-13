@@ -26,6 +26,7 @@
     "yaml": "^2.9.0"
   },
   "dependencies": {
-    "@blackwell-systems/gcf": "^0.2.0"
+    "@blackwell-systems/gcf": "^0.2.0",
+    "ploon": "^1.0.7"
   }
 }
