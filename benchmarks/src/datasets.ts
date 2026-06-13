@@ -1,6 +1,7 @@
 import type { Dataset } from './types.ts'
 import { faker } from '@faker-js/faker'
 import githubRepos from '../data/github-repos.json' with { type: 'json' }
+import comprehensionEvalPayload from '../data/comprehension-eval-500orders.json' with { type: 'json' }
 
 // Seed for reproducibility
 faker.seed(12345)
@@ -1325,6 +1326,17 @@ export const TOKEN_EFFICIENCY_DATASETS: Dataset[] = [
       supportsCSV: false,
       structureClass: 'nested',
       tabularEligibility: 65,
+    },
+  },
+  // Dataset 15: Comprehension Eval Payload (exact fixture used in LLM eval)
+  {
+    name: 'comprehension-eval-payload',
+    description: 'Exact 500-order payload from comprehension eval (same data models are tested on)',
+    data: comprehensionEvalPayload,
+    metadata: {
+      supportsCSV: false,
+      structureClass: 'nested',
+      tabularEligibility: 70,
     },
   },
 ]
