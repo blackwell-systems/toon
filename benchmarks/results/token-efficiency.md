@@ -8,7 +8,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                █████████████░░░░░░░    73,246 tokens
    ├─ vs JSON          (−33.2%)               109,574 tokens
    ├─ vs JSON compact  (+5.3%)                 69,528 tokens
-   ├─ vs GCF v2        (+42.7%)                51,334 tokens
+   ├─ vs GCF           (+45.5%)                50,343 tokens
    ├─ vs PLOON         (+38.1%)                53,026 tokens
    ├─ vs YAML          (−14.3%)                85,451 tokens
    └─ vs XML           (−40.6%)               123,272 tokens
@@ -18,7 +18,7 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                █████████████████░░░   154,032 tokens
    ├─ vs JSON          (−15.0%)               181,141 tokens
    ├─ vs JSON compact  (+19.9%)               128,480 tokens
-   ├─ vs GCF v2        (+59.2%)                96,747 tokens
+   ├─ vs GCF           (+61.8%)                95,193 tokens
    ├─ vs PLOON         (+53.4%)               100,403 tokens
    ├─ vs YAML          (−0.8%)                155,346 tokens
    └─ vs XML           (−25.2%)               205,796 tokens
@@ -28,19 +28,89 @@ Datasets with nested or semi-uniform structures. CSV excluded as it cannot prope
    TOON                ██████████████░░░░░░       618 tokens
    ├─ vs JSON          (−31.7%)                   905 tokens
    ├─ vs JSON compact  (+12.0%)                   552 tokens
-   ├─ vs GCF v2        (−4.2%)                    645 tokens
+   ├─ vs GCF           (+0.2%)                    617 tokens
    ├─ vs PLOON         (+3.5%)                    597 tokens
    ├─ vs YAML          (−6.6%)                    662 tokens
    └─ vs XML           (−38.0%)                   997 tokens
 
+📊 Pull request file change summary  ┊  Tabular: 80%
+   │
+   TOON                ████████████░░░░░░░░     2,657 tokens
+   ├─ vs JSON          (−41.2%)                 4,521 tokens
+   ├─ vs JSON compact  (−21.8%)                 3,399 tokens
+   ├─ vs GCF           (+1.3%)                  2,623 tokens
+   ├─ vs PLOON         (−0.9%)                  2,680 tokens
+   ├─ vs YAML          (−33.0%)                 3,968 tokens
+   └─ vs XML           (−45.3%)                 4,860 tokens
+
+📊 Distributed trace spans for an API error  ┊  Tabular: 40%
+   │
+   TOON                ████████████████░░░░     4,959 tokens
+   ├─ vs JSON          (−20.9%)                 6,266 tokens
+   ├─ vs JSON compact  (+9.2%)                  4,541 tokens
+   ├─ vs GCF           (+14.8%)                 4,318 tokens
+   ├─ vs PLOON         (+41.8%)                 3,497 tokens
+   ├─ vs YAML          (−3.8%)                  5,154 tokens
+   └─ vs XML           (−30.0%)                 7,084 tokens
+
+📊 Project file tree with LSP diagnostics  ┊  Tabular: 55%
+   │
+   TOON                █████████████░░░░░░░     6,894 tokens
+   ├─ vs JSON          (−36.9%)                10,918 tokens
+   ├─ vs JSON compact  (−3.2%)                  7,123 tokens
+   ├─ vs GCF           (+14.6%)                 6,018 tokens
+   ├─ vs PLOON         (+25.9%)                 5,474 tokens
+   ├─ vs YAML          (−18.8%)                 8,490 tokens
+   └─ vs XML           (−44.5%)                12,411 tokens
+
+📊 Multi-tool agent session with heterogeneous results  ┊  Tabular: 45%
+   │
+   TOON                █████████████░░░░░░░     3,192 tokens
+   ├─ vs JSON          (−35.8%)                 4,969 tokens
+   ├─ vs JSON compact  (−10.4%)                 3,561 tokens
+   ├─ vs GCF           (+1.9%)                  3,131 tokens
+   ├─ vs PLOON         (+6.3%)                  3,003 tokens
+   ├─ vs YAML          (−20.9%)                 4,033 tokens
+   └─ vs XML           (−43.2%)                 5,624 tokens
+
+📊 Order history testing shared array schema optimization  ┊  Tabular: 70%
+   │
+   TOON                ████████████░░░░░░░░    16,454 tokens
+   ├─ vs JSON          (−37.7%)                26,429 tokens
+   ├─ vs JSON compact  (−4.6%)                 17,254 tokens
+   ├─ vs GCF           (+23.8%)                13,295 tokens
+   ├─ vs PLOON         (+17.0%)                14,062 tokens
+   ├─ vs YAML          (−21.4%)                20,934 tokens
+   └─ vs XML           (−44.9%)                29,860 tokens
+
+📊 Blast radius response testing shared caller schema  ┊  Tabular: 65%
+   │
+   TOON                ███████████░░░░░░░░░     7,831 tokens
+   ├─ vs JSON          (−46.0%)                14,515 tokens
+   ├─ vs JSON compact  (−14.4%)                 9,153 tokens
+   ├─ vs GCF           (+19.4%)                 6,561 tokens
+   ├─ vs PLOON         (+11.9%)                 6,998 tokens
+   ├─ vs YAML          (−28.9%)                11,021 tokens
+   └─ vs XML           (−55.1%)                17,443 tokens
+
+📊 Exact 500-order payload from comprehension eval (same data models are tested on)  ┊  Tabular: 70%
+   │
+   TOON                ████████████░░░░░░░░    60,603 tokens
+   ├─ vs JSON          (−37.5%)                97,034 tokens
+   ├─ vs JSON compact  (+4.4%)                 58,030 tokens
+   ├─ vs GCF           (+51.1%)                40,097 tokens
+   ├─ vs PLOON         (+40.7%)                43,061 tokens
+   ├─ vs YAML          (−16.5%)                72,602 tokens
+   └─ vs XML           (−44.9%)               109,900 tokens
+
 ──────────────────────────────────── Total ────────────────────────────────────
-   TOON                ████████████████░░░░   227,896 tokens
-   ├─ vs JSON          (−21.9%)               291,620 tokens
-   ├─ vs JSON compact  (+14.8%)               198,560 tokens
-   ├─ vs GCF v2        (+53.2%)               148,726 tokens
-   ├─ vs PLOON         (+48.0%)               154,026 tokens
-   ├─ vs YAML          (−5.6%)                241,459 tokens
-   └─ vs XML           (−31.0%)               330,065 tokens
+   TOON                ██████████████░░░░░░   330,486 tokens
+   ├─ vs JSON          (−27.6%)               456,272 tokens
+   ├─ vs JSON compact  (+9.6%)                301,621 tokens
+   ├─ vs GCF           (+48.7%)               222,196 tokens
+   ├─ vs PLOON         (+42.0%)               232,801 tokens
+   ├─ vs YAML          (−10.1%)               367,661 tokens
+   └─ vs XML           (−36.1%)               517,247 tokens
 ```
 
 #### Flat-Only Track
@@ -54,7 +124,7 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████    49,966 tokens   (+6.0% vs CSV)
    ├─ vs JSON          (−60.7%)               127,050 tokens
    ├─ vs JSON compact  (−36.8%)                79,046 tokens
-   ├─ vs GCF v2        (+1.8%)                 49,061 tokens
+   ├─ vs GCF           (+1.8%)                 49,061 tokens
    ├─ vs PLOON         (−13.9%)                58,057 tokens
    ├─ vs YAML          (−50.1%)               100,033 tokens
    └─ vs XML           (−65.9%)               146,596 tokens
@@ -65,7 +135,7 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████     9,127 tokens   (+8.7% vs CSV)
    ├─ vs JSON          (−59.0%)                22,257 tokens
    ├─ vs JSON compact  (−35.8%)                14,223 tokens
-   ├─ vs GCF v2        (+4.1%)                  8,769 tokens
+   ├─ vs GCF           (+8.6%)                  8,404 tokens
    ├─ vs PLOON         (−7.4%)                  9,858 tokens
    ├─ vs YAML          (−48.9%)                17,870 tokens
    └─ vs XML           (−65.7%)                26,628 tokens
@@ -76,20 +146,42 @@ Datasets with flat tabular structures where CSV is applicable.
    TOON                ████████████████████     8,744 tokens   (+2.7% vs CSV)
    ├─ vs JSON          (−42.3%)                15,144 tokens
    ├─ vs JSON compact  (−23.7%)                11,454 tokens
-   ├─ vs GCF v2        (−1.0%)                  8,830 tokens
+   ├─ vs GCF           (+1.7%)                  8,599 tokens
    ├─ vs PLOON         (−2.6%)                  8,982 tokens
    ├─ vs YAML          (−33.4%)                13,128 tokens
    └─ vs XML           (−48.9%)                17,095 tokens
 
+📊 LSP workspace symbol search results  ┊  Tabular: 95%
+   │
+   CSV                 ███████████████████░     5,012 tokens
+   TOON                ████████████████████     5,365 tokens   (+7.0% vs CSV)
+   ├─ vs JSON          (−62.9%)                14,444 tokens
+   ├─ vs JSON compact  (−41.6%)                 9,184 tokens
+   ├─ vs GCF           (−1.4%)                  5,442 tokens
+   ├─ vs PLOON         (−11.0%)                 6,026 tokens
+   ├─ vs YAML          (−53.1%)                11,431 tokens
+   └─ vs XML           (−68.1%)                16,835 tokens
+
+📊 Wide-table database query results with 15 columns  ┊  Tabular: 97%
+   │
+   CSV                 ████████████████████    17,552 tokens
+   TOON                ████████████████████    17,969 tokens   (+2.4% vs CSV)
+   ├─ vs JSON          (−51.6%)                37,091 tokens
+   ├─ vs JSON compact  (−33.8%)                27,134 tokens
+   ├─ vs GCF           (+1.4%)                 17,716 tokens
+   ├─ vs PLOON         (+10595.8%)                168 tokens
+   ├─ vs YAML          (−42.3%)                31,157 tokens
+   └─ vs XML           (−59.0%)                43,850 tokens
+
 ──────────────────────────────────── Total ────────────────────────────────────
-   CSV                 ███████████████████░    64,044 tokens
-   TOON                ████████████████████    67,837 tokens   (+5.9% vs CSV)
-   ├─ vs JSON          (−58.7%)               164,451 tokens
-   ├─ vs JSON compact  (−35.2%)               104,723 tokens
-   ├─ vs GCF v2        (+1.8%)                 66,660 tokens
-   ├─ vs PLOON         (−11.8%)                76,897 tokens
-   ├─ vs YAML          (−48.2%)               131,031 tokens
-   └─ vs XML           (−64.4%)               190,319 tokens
+   CSV                 ███████████████████░    86,608 tokens
+   TOON                ████████████████████    91,171 tokens   (+5.3% vs CSV)
+   ├─ vs JSON          (−57.8%)               215,986 tokens
+   ├─ vs JSON compact  (−35.4%)               141,041 tokens
+   ├─ vs GCF           (+2.2%)                 89,222 tokens
+   ├─ vs PLOON         (+9.7%)                 83,091 tokens
+   ├─ vs YAML          (−47.5%)               173,619 tokens
+   └─ vs XML           (−63.7%)               251,004 tokens
 ```
 
 <details>
